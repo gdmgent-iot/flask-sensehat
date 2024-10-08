@@ -6,9 +6,6 @@
     <title>SenseHat - Movimento muy sensual - Bomba!</title>
     <!-- link bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-    <!-- refresh meta tag -->
-    <meta http-equiv="refresh" content="20">
 </head>
 <body>
     
@@ -32,7 +29,34 @@
                 <p>{{ humidity }}</p>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2>Send a message to the matrix</h2>
+                <form action="" method="post">
+                    <input type="text" name="message" id="message" class="form-control">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
     </div>
+    <script>
+        // submit form via AJAX
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let message = document.querySelector('#message').value;
+            fetch('/api/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({message: message})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+        });
+    </script>
     
 </body>
 </html>
