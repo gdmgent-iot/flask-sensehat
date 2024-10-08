@@ -3,6 +3,8 @@ from sense_hat import SenseHat
 
 app = Flask(__name__)
 
+showing_message = False
+
 sense = SenseHat()
 
 @app.route('/')
@@ -14,12 +16,18 @@ def main():
 
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
+    global showing_message
+    # set orientation of the message
+    sense.set_rotation(0)
     #message was sent via json in 'message' key
     message = request.json['message']
-    sense.show_message(message)
+    txtColor = request.json['color']
+    if not showing_message:
+        showing_message = True
+        sense.show_message(message, text_colour=txtColor)
+    showing_message = False
+
     return jsonify({'message': message})
 
 if __name__ == "__main__" :
-    # send welcome to he led matrix, red and blue letters
-    sense.show_message("Welcome to my first Flask site", text_colour=[255, 0, 0], back_colour=[0, 0, 255])
     app.run(host="0.0.0.0", debug=True, port=80)

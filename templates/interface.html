@@ -33,7 +33,10 @@
             <div class="col-12 text-center">
                 <h2>Send a message to the matrix</h2>
                 <form action="" method="post">
+                    <label>Message</label>
                     <input type="text" name="message" id="message" class="form-control">
+                    <label>Text color</label>
+                    <input type="color" name="color" id="color" class="form-control" value="#FFFF00">
                     <button type="submit" class="btn btn-primary">Send</button>
                 </form>
             </div>
@@ -44,18 +47,33 @@
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault();
             let message = document.querySelector('#message').value;
+            let color = document.querySelector('#color').value;
+
+
             fetch('/api/send_message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({message: message})
+                body: JSON.stringify(
+                    {
+                        message: message,
+                        color: hexToRgb(color)
+                    })
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
             });
         });
+
+        function hexToRgb(hex) {
+            // turn hex to rgb
+            let r = parseInt(hex.substring(1, 3), 16);
+            let g = parseInt(hex.substring(3, 5), 16);
+            let b = parseInt(hex.substring(5, 7), 16);
+            return [r, g, b];
+        }
     </script>
     
 </body>
